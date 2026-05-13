@@ -1,0 +1,29 @@
+* {
+    margin: 0%;
+    padding: 0%;
+    font-family:cursive;
+}
+
+body {
+    display: flex;
+    height: 80vh;
+    flex-direction: row;
+    background-color: rgb(255, 127, 249);
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+#div1 {
+    background-color: bisque;
+}
+#div2 {
+    background-color:aquamarine
+}
+#div3 {
+    background-color:rgb(176, 99, 248)
+}
+.divs {
+    width: 150px;
+    height: 150px;
+    display: flex;
+}
