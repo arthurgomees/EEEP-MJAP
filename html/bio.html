@@ -1,0 +1,1723 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BioZoom — Biologia do Ensino Médio</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green-dark: #0a3d2e;
+    --green-mid: #1a6b4a;
+    --green-light: #2ecc8f;
+    --green-pale: #d4f5e6;
+    --teal: #0d9488;
+    --amber: #d97706;
+    --amber-light: #fef3c7;
+    --coral: #e05240;
+    --purple: #6d28d9;
+    --purple-light: #ede9fe;
+    --gold: #f59e0b;
+    --bg: #f0f9f4;
+    --card-bg: #ffffff;
+    --text: #0a1a12;
+    --text-muted: #4a7060;
+    --border: rgba(30,100,60,0.15);
+    --radius: 16px;
+    --shadow: 0 4px 30px rgba(10,60,40,0.12);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* HEADER */
+  header {
+    background: var(--green-dark);
+    padding: 0 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 3px solid var(--green-light);
+  }
+  .header-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 70px;
+  }
+  .logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    font-weight: 900;
+    color: #fff;
+    letter-spacing: -1px;
+  }
+  .logo span { color: var(--green-light); }
+  .header-sub { font-size: 0.7rem; color: rgba(255,255,255,0.5); letter-spacing: 3px; text-transform: uppercase; margin-top: 2px; }
+
+  /* SERIES TABS */
+  .tabs-wrap {
+    background: var(--green-dark);
+    padding-bottom: 0;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  .tabs {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    gap: 0;
+    padding: 0 2rem;
+  }
+  .tab {
+    padding: 0.85rem 2.2rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: rgba(255,255,255,0.55);
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all 0.25s;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+  }
+  .tab:hover { color: rgba(255,255,255,0.85); }
+  .tab.active { color: var(--green-light); border-bottom-color: var(--green-light); }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, var(--green-dark) 0%, #14532d 50%, #0f4c29 100%);
+    padding: 3.5rem 2rem 2.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -10%;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    background: rgba(46,204,143,0.07);
+    pointer-events: none;
+  }
+  .hero-inner { max-width: 1200px; margin: 0 auto; }
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(46,204,143,0.18);
+    border: 1px solid rgba(46,204,143,0.35);
+    color: var(--green-light);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    border-radius: 50px;
+    margin-bottom: 1rem;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 900;
+    color: #fff;
+    line-height: 1.15;
+    margin-bottom: 0.8rem;
+    max-width: 700px;
+  }
+  .hero h1 em { color: var(--green-light); font-style: italic; }
+  .hero p {
+    color: rgba(255,255,255,0.65);
+    font-size: 1.05rem;
+    max-width: 560px;
+    line-height: 1.7;
+  }
+
+  /* SERIES CONTENT */
+  .serie-section { display: none; }
+  .serie-section.active { display: block; }
+
+  /* YEAR LABEL */
+  .year-label {
+    max-width: 1200px;
+    margin: 2.5rem auto 0;
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .year-badge {
+    background: var(--green-mid);
+    color: #fff;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 6px 18px;
+    border-radius: 50px;
+  }
+  .year-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--green-dark);
+  }
+
+  /* GRID DE CARDS */
+  .cards-grid {
+    max-width: 1200px;
+    margin: 1.5rem auto 3rem;
+    padding: 0 2rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .bio-card {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: transform 0.3s cubic-bezier(.34,1.56,.64,1), box-shadow 0.3s;
+    position: relative;
+  }
+  .bio-card:hover {
+    transform: translateY(-8px) scale(1.015);
+    box-shadow: 0 16px 50px rgba(10,60,40,0.2);
+  }
+  .bio-card:hover .card-zoom-hint { opacity: 1; transform: scale(1); }
+
+  .card-img {
+    width: 100%;
+    height: 180px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 5rem;
+  }
+  .card-img svg {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0; left: 0;
+  }
+  .card-emoji {
+    font-size: 4.5rem;
+    z-index: 1;
+    filter: drop-shadow(0 4px 12px rgba(0,0,0,0.2));
+    transition: transform 0.4s cubic-bezier(.34,1.56,.64,1);
+  }
+  .bio-card:hover .card-emoji { transform: scale(1.2) rotate(-3deg); }
+
+  .card-zoom-hint {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background: rgba(10,61,46,0.85);
+    color: #fff;
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    opacity: 0;
+    transform: scale(0.85);
+    transition: all 0.25s;
+    z-index: 2;
+  }
+
+  .card-body { padding: 1.2rem 1.3rem; }
+  .card-tag {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--green-mid);
+    margin-bottom: 0.4rem;
+  }
+  .card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--green-dark);
+    margin-bottom: 0.4rem;
+    line-height: 1.3;
+  }
+  .card-desc {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+  .card-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 0.8rem;
+  }
+  .chip {
+    font-size: 0.68rem;
+    font-weight: 600;
+    padding: 3px 9px;
+    border-radius: 50px;
+    border: 1px solid;
+  }
+  .chip-green { background: var(--green-pale); color: var(--green-mid); border-color: rgba(30,107,74,0.25); }
+  .chip-amber { background: var(--amber-light); color: var(--amber); border-color: rgba(217,119,6,0.25); }
+  .chip-purple { background: var(--purple-light); color: var(--purple); border-color: rgba(109,40,217,0.25); }
+  .chip-coral { background: #fde8e6; color: var(--coral); border-color: rgba(224,82,64,0.25); }
+
+  /* MODAL */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(5,25,15,0.75);
+    backdrop-filter: blur(8px);
+    z-index: 1000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    animation: fadeIn 0.25s ease;
+  }
+  .modal-overlay.open { display: flex; }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+  .modal {
+    background: #fff;
+    border-radius: 20px;
+    width: 100%;
+    max-width: 860px;
+    max-height: 92vh;
+    overflow-y: auto;
+    box-shadow: 0 30px 100px rgba(0,0,0,0.35);
+    animation: slideUp 0.35s cubic-bezier(.34,1.56,.64,1);
+    position: relative;
+  }
+  @keyframes slideUp { from { opacity: 0; transform: translateY(60px) scale(0.92); } to { opacity: 1; transform: none; } }
+
+  .modal-close {
+    position: absolute;
+    top: 1.2rem; right: 1.2rem;
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    background: rgba(10,61,46,0.08);
+    border: none;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem;
+    color: var(--green-dark);
+    transition: background 0.2s;
+    z-index: 10;
+  }
+  .modal-close:hover { background: rgba(10,61,46,0.15); }
+
+  .modal-hero {
+    width: 100%;
+    height: 240px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    border-radius: 20px 20px 0 0;
+  }
+  .modal-hero svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .modal-hero-emoji {
+    font-size: 6rem;
+    z-index: 1;
+    animation: pulse 2s ease-in-out infinite;
+    filter: drop-shadow(0 8px 24px rgba(0,0,0,0.2));
+  }
+  @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.06); } }
+
+  .modal-body { padding: 1.8rem 2.2rem 2.5rem; }
+  .modal-tag {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--green-mid);
+    margin-bottom: 0.5rem;
+  }
+  .modal-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 900;
+    color: var(--green-dark);
+    margin-bottom: 0.6rem;
+    line-height: 1.2;
+  }
+  .modal-intro {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    line-height: 1.75;
+    margin-bottom: 2rem;
+    max-width: 680px;
+  }
+
+  /* ZOOM LAYERS */
+  .zoom-section { margin-bottom: 2rem; }
+  .zoom-section-title {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .zoom-section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .detail-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+    gap: 1rem;
+  }
+
+  .detail-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.1rem;
+    transition: transform 0.25s, box-shadow 0.25s;
+    cursor: default;
+  }
+  .detail-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(10,60,40,0.12);
+  }
+  .detail-icon {
+    font-size: 1.8rem;
+    margin-bottom: 0.6rem;
+    display: block;
+  }
+  .detail-name {
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: var(--green-dark);
+    margin-bottom: 0.3rem;
+  }
+  .detail-desc {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+  .detail-card.highlight {
+    background: var(--green-pale);
+    border-color: rgba(30,107,74,0.3);
+  }
+
+  /* FACT BOX */
+  .fact-box {
+    background: linear-gradient(135deg, var(--green-pale), #e8f8f0);
+    border: 1px solid rgba(30,107,74,0.2);
+    border-left: 4px solid var(--green-light);
+    border-radius: 10px;
+    padding: 1rem 1.3rem;
+    margin-top: 1.5rem;
+    font-size: 0.88rem;
+    color: var(--green-dark);
+    line-height: 1.7;
+  }
+  .fact-box strong { color: var(--green-mid); }
+
+  /* ORGANELAS */
+  .organela-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+    gap: 0.8rem;
+    margin-top: 0.5rem;
+  }
+  .organela-item {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.9rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+  }
+  .organela-icon { font-size: 1.5rem; }
+  .organela-name { font-size: 0.85rem; font-weight: 700; color: var(--green-dark); }
+  .organela-func { font-size: 0.73rem; color: var(--text-muted); line-height: 1.5; }
+
+  /* PROGRESS ZOOM */
+  .zoom-path {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin-bottom: 1.5rem;
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+  .zoom-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    min-width: 80px;
+  }
+  .zoom-step-icon {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: var(--green-pale);
+    border: 2px solid var(--green-light);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem;
+    color: var(--green-mid);
+    font-weight: 700;
+  }
+  .zoom-step-label { font-size: 0.68rem; color: var(--text-muted); text-align: center; font-weight: 500; }
+  .zoom-arrow {
+    font-size: 1.1rem;
+    color: var(--green-light);
+    flex-shrink: 0;
+    margin-bottom: 16px;
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--green-dark);
+    color: rgba(255,255,255,0.5);
+    text-align: center;
+    font-size: 0.8rem;
+    padding: 1.5rem;
+    margin-top: 3rem;
+  }
+  footer span { color: var(--green-light); }
+
+  /* Scrollbar */
+  .modal::-webkit-scrollbar { width: 6px; }
+  .modal::-webkit-scrollbar-track { background: #f0f0f0; }
+  .modal::-webkit-scrollbar-thumb { background: var(--green-light); border-radius: 10px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div>
+      <div class="logo">Bio<span>Zoom</span></div>
+      <div class="header-sub">Biologia Visual do Ensino Médio</div>
+    </div>
+    <div style="font-size:0.8rem;color:rgba(255,255,255,0.4);text-align:right;display:none" id="hint">Clique em qualquer imagem para ampliar</div>
+  </div>
+</header>
+
+<div class="tabs-wrap">
+  <div class="tabs">
+    <div class="tab active" onclick="setSerie(1)">🔬 1º Ano</div>
+    <div class="tab" onclick="setSerie(2)">🧬 2º Ano</div>
+    <div class="tab" onclick="setSerie(3)">🌿 3º Ano</div>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-badge">🔍 Zoom Científico</div>
+    <h1>Explore a vida<br>de perto.<em>De verdade.</em></h1>
+    <p>Clique em qualquer imagem para mergulhar nos detalhes moleculares, celulares e bioquímicos de cada organismo e estrutura.</p>
+  </div>
+</div>
+
+<!-- ===== 1º ANO ===== -->
+<div class="serie-section active" id="serie-1">
+  <div class="year-label">
+    <span class="year-badge">1º Ano</span>
+    <span class="year-title">Citologia, Bioquímica e Origem da Vida</span>
+  </div>
+
+  <div class="cards-grid">
+    <!-- Card 1 -->
+    <div class="bio-card" onclick="openModal('celula-animal')">
+      <div class="card-img" style="background: linear-gradient(135deg,#e8f8f0,#c5edd9)">
+        <svg viewBox="0 0 300 180" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="150" cy="90" rx="120" ry="70" fill="rgba(46,204,143,0.15)" stroke="rgba(30,107,74,0.3)" stroke-width="1.5"/>
+          <ellipse cx="150" cy="90" rx="70" ry="45" fill="rgba(46,204,143,0.2)" stroke="rgba(30,107,74,0.4)" stroke-width="1.5"/>
+          <circle cx="150" cy="90" r="18" fill="rgba(13,148,136,0.35)" stroke="rgba(13,148,136,0.6)" stroke-width="1.5"/>
+          <circle cx="110" cy="70" r="8" fill="rgba(217,119,6,0.3)" stroke="rgba(217,119,6,0.5)" stroke-width="1"/>
+          <circle cx="185" cy="105" r="6" fill="rgba(109,40,217,0.25)" stroke="rgba(109,40,217,0.4)" stroke-width="1"/>
+          <circle cx="125" cy="115" r="5" fill="rgba(224,82,64,0.25)" stroke="rgba(224,82,64,0.4)" stroke-width="1"/>
+          <circle cx="170" cy="72" r="4" fill="rgba(217,119,6,0.3)" stroke="rgba(217,119,6,0.5)" stroke-width="1"/>
+        </svg>
+        <span class="card-emoji">🦠</span>
+        <span class="card-zoom-hint">🔍 Ver detalhes</span>
+      </div>
+      <div class="card-body">
+        <div class="card-tag">Citologia</div>
+        <div class="card-title">Célula Animal</div>
+        <div class="card-desc">A unidade básica da vida. Explore suas organelas e membranas.</div>
+        <div class="card-chips">
+          <span class="chip chip-green">Membrana</span>
+          <span class="chip chip-purple">Núcleo</span>
+          <span class="chip chip-amber">Mitocôndria</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="bio-card" onclick="openModal('proteina')">
+      <div class="card-img" style="background: linear-gradient(135deg,#fdf4e7,#fce8c0)">
+        <svg viewBox="0 0 300 180" xmlns="http://www.w3.org/2000/svg">
+          <path d="M60,90 Q80,50 110,90 Q140,130 170,90 Q200,50 230,90 Q250,110 260,90" fill="none" stroke="rgba(217,119,6,0.6)" stroke-width="3" stroke-linecap="round"/>
+          <path d="M60,100 Q80,60 110,100 Q140,140 170,100 Q200,60 230,100" fill="none" stroke="rgba(217,119,6,0.3)" stroke-width="5" stroke-linecap="round"/>
+          <circle cx="90" cy="72" r="7" fill="rgba(224,82,64,0.5)"/>
+          <circle cx="140" cy="112" r="7" fill="rgba(224,82,64,0.5)"/>
+          <circle cx="190" cy="72" r="7" fill="rgba(224,82,64,0.5)"/>
+          <circle cx="235" cy="100" r="7" fill="rgba(109,40,217,0.5)"/>
+        </svg>
+        <span class="card-emoji">🧪</span>
+        <span class="card-zoom-hint">🔍 Ver detalhes</span>
+      </div>
+      <div class="card-body">
+        <div class="card-tag">Bioquímica</div>
+        <div class="card-title">Proteínas</div>
+        <div class="card-desc">Polímeros de aminoácidos com funções estruturais, enzimáticas e hormonais.</div>
+        <div class="card-chips">
+          <span class="chip chip-amber">Aminoácidos</span>
+          <span class="chip chip-coral">Estrutura</span>
+          <span class="chip chip-green">Enzimas</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="bio-card" onclick="openModal('carboidratos')">
+      <div class="card-img" style="background: linear-gradient(135deg,#ede9fe,#ddd6fe)">
+        <svg viewBox="0 0 300 180" xmlns="http://www.w3.org/2000/svg">
+          <polygon points="150,30 210,90 190,150 110,150 90,90" fill="rgba(109,40,217,0.15)" stroke="rgba(109,40,217,0.4)" stroke-width="2"/>
+          <polygon points="150,50 195,95 178,140 122,140 105,95" fill="rgba(109,40,217,0.15)" stroke="rgba(109,40,217,0.35)" stroke-width="1.5"/>
+          <circle cx="150" cy="30" r="8" fill="rgba(109,40,217,0.5)"/>
+          <circle cx="210" cy="90" r="8" fill="rgba(109,40,217,0.5)"/>
+          <circle cx="190" cy="150" r="8" fill="rgba(109,40,217,0.5)"/>
+          <circle cx="110" cy="150" r="8" fill="rgba(109,40,217,0.5)"/>
+          <circle cx="90" cy="90" r="8" fill="rgba(109,40,217,0.5)"/>
+          <text x="150" y="95" font-size="11" text-anchor="middle" fill="rgba(109,40,217,0.7)" font-weight="bold">glicose</text>
+        </svg>
+        <span class="card-emoji">🍬</span>
+        <span class="card-zoom-hint">🔍 Ver detalhes</span>
+      </div>
+      <div class="card-body">
+        <div class="card-tag">Bioquímica</div>
+        <div class="card-title">Carboidratos</div>
+        <div class="card-desc">Principal fonte de energia celular. Da glicose ao amido e celulose.</div>
+        <div class="card-chips">
+          <span class="chip chip-purple">Glicose</span>
+          <span class="chip chip-green">Amido</span>
+          <span class="chip chip-amber">ATP</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 4 -->
+    <div class="bio-card" onclick="openModal('lipidios')">
+      <div class="card-img" style="background: linear-gradient(135deg,#fde8e6,#fcc7c2)">
+        <svg viewBox="0 0 300 180" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="150" cy="90" rx="100" ry="55" fill="rgba(224,82,64,0.12)" stroke="rgba(224,82,64,0.3)" stroke-width="1.5"/>
+          <circle cx="90" cy="90" r="12" fill="rgba(224,82,64,0.4)"/>
+          <line x1="90" y1="90" x2="90" y2="140" stroke="rgba(224,82,64,0.5)" stroke-width="3"/>
+          <circle cx="130" cy="80" r="12" fill="rgba(224,82,64,0.4)"/>
+          <line x1="130" y1="80" x2="130" y2="140" stroke="rgba(224,82,64,0.5)" stroke-width="3"/>
+          <circle cx="170" cy="100" r="12" fill="rgba(224,82,64,0.4)"/>
+          <line x1="170" y1="100" x2="170" y2="140" stroke="rgba(224,82,64,0.5)" stroke-width="3"/>
+          <circle cx="210" cy="85" r="12" fill="rgba(224,82,64,0.4)"/>
+          <line x1="210" y1="85" x2="210" y2="140" stroke="rgba(224,82,64,0.5)" stroke-width="3"/>
+          <rect x="65" y="140" width="180" height="8" rx="4" fill="rgba(224,82,64,0.3)"/>
+        </svg>
+        <span class="card-emoji">🧈</span>
+        <span class="card-zoom-hint">🔍 Ver detalhes</span>
+      </div>
+      <div class="card-body">
+        <div class="card-tag">Bioquímica</div>
+        <div class="card-title">Lipídios</div>
+        <div class="card-desc">Moléculas hidrofóbicas essenciais para membranas, hormônios e energia.</div>
+        <div class="card-chips">
+          <span class="chip chip-coral">Fosfolipídio</span>
+          <span class="chip chip-amber">Colesterol</span>
+          <span class="chip chip-green">Membrana</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 5 -->
+    <div class="bio-card" onclick="openModal('dna')">
+      <div class="card-img" style="background: linear-gradient(135deg,#e0f2fe,#bae6fd)">
+        <svg viewBox="0 0 300 180" xmlns="http://www.w3.org/2000/svg">
+          <path d="M120,20 Q160,50 120,80 Q80,110 120,140 Q160,170 120,180" fill="none" stroke="rgba(14,165,233,0.7)" stroke-width="3"/>
+          <path d="M180,20 Q140,50 180,80 Q220,110 180,140 Q140,170 180,180" fill="none" stroke="rgba(14,165,233,0.7)" stroke-width="3"/>
+          <line x1="124" y1="35" x2="176" y2="35" stroke="rgba(224,82,64,0.6)" stroke-width="2.5"/>
+          <line x1="116" y1="60" x2="184" y2="60" stroke="rgba(46,204,143,0.6)" stroke-width="2.5"/>
+          <line x1="122" y1="90" x2="178" y2="90" stroke="rgba(109,40,217,0.6)" stroke-width="2.5"/>
+          <line x1="116" y1="120" x2="184" y2="120" stroke="rgba(217,119,6,0.6)" stroke-width="2.5"/>
+          <line x1="124" y1="150" x2="176" y2="150" stroke="rgba(224,82,64,0.6)" stroke-width="2.5"/>
+        </svg>
+        <span class="card-emoji">🧬</span>
+        <span class="card-zoom-hint">🔍 Ver detalhes</span>
+      </div>
+      <div class="card-body">
+        <div class="card-tag">Genética Molecular</div>
+        <div class="card-title">DNA</div>
+        <div class="card-desc">A molécula da hereditariedade. Dupla hélice, bases nitrogenadas e genes.</div>
+        <div class="card-chips">
+          <span class="chip chip-green">Bases</span>
+          <span class="chip chip-purple">Cromossomos</span>
+          <span class="chip chip-coral">Replicação</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 6 -->
+    <div class="bio-card" onclick="openModal('membrana')">
+      <div class="card-img" style="background: linear-gradient(135deg,#d1fae5,#a7f3d0)">
+        <svg viewBox="0 0 300 180" xmlns="http://www.w3.org/2000/svg">
+          <rect x="10" y="70" width="280" height="40" rx="20" fill="rgba(30,107,74,0.1)"/>
+          <rect x="10" y="70" width="280" height="40" rx="20" fill="none" stroke="rgba(30,107,74,0.3)" stroke-width="1.5"/>
+          <circle cx="40" cy="72" r="9" fill="rgba(30,107,74,0.5)"/><line x1="40" y1="81" x2="40" y2="105" stroke="rgba(30,107,74,0.5)" stroke-width="3"/>
+          <circle cx="80" cy="72" r="9" fill="rgba(30,107,74,0.5)"/><line x1="80" y1="81" x2="80" y2="105" stroke="rgba(30,107,74,0.5)" stroke-width="3"/>
+          <circle cx="120" cy="72" r="9" fill="rgba(30,107,74,0.5)"/><line x1="120" y1="81" x2="120" y2="105" stroke="rgba(30,107,74,0.5)" stroke-width="3"/>
+          <circle cx="160" cy="72" r="9" fill="rgba(30,107,74,0.5)"/><line x1="160" y1="81" x2="160" y2="105" stroke="rgba(30,107,74,0.5)" stroke-width="3"/>
+          <circle cx="200" cy="72" r="9" fill="rgba(30,107,74,0.5)"/><line x1="200" y1="81" x2="200" y2="105" stroke="rgba(30,107,74,0.5)" stroke-width="3"/>
+          <circle cx="240" cy="72" r="9" fill="rgba(30,107,74,0.5)"/><line x1="240" y1="81" x2="240" y2="105" stroke="rgba(30,107,74,0.5)" stroke-width="3"/>
+          <circle cx="40" cy="108" r="9" fill="rgba(30,107,74,0.5)"/><line x1="40" y1="81" x2="40" y2="108" stroke="rgba(30,107,74,0.5)" stroke-width="3"/>
+          <circle cx="80" cy="108" r="9" fill="rgba(30,107,74,0.5)"/>
+          <circle cx="120" cy="108" r="9" fill="rgba(30,107,74,0.5)"/>
+          <circle cx="160" cy="108" r="9" fill="rgba(30,107,74,0.5)"/>
+          <circle cx="200" cy="108" r="9" fill="rgba(30,107,74,0.5)"/>
+          <circle cx="240" cy="108" r="9" fill="rgba(30,107,74,0.5)"/>
+          <ellipse cx="140" cy="90" rx="18" ry="22" fill="rgba(217,119,6,0.4)" stroke="rgba(217,119,6,0.6)" stroke-width="1.5"/>
+        </svg>
+        <span class="card-emoji">🫧</span>
+        <span class="card-zoom-hint">🔍 Ver detalhes</span>
+      </div>
+      <div class="card-body">
+        <div class="card-tag">Citologia</div>
+        <div class="card-title">Membrana Plasmática</div>
+        <div class="card-desc">Bicamada fosfolipídica que controla o que entra e sai da célula.</div>
+        <div class="card-chips">
+          <span class="chip chip-coral">Fosfolipídios</span>
+          <span class="chip chip-amber">Proteínas</span>
+          <span class="chip chip-green">Transporte</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 2º ANO ===== -->
+<div class="serie-section" id="serie-2">
+  <div class="year-label">
+    <span class="year-badge">2º Ano</span>
+    <span class="year-title">Fisiologia, Histologia e Genética</span>
+  </div>
+
+  <div class="cards-grid">
+    <div class="bio-card" onclick="openModal('neuronio')">
+      <div class="card-img" style="background: linear-gradient(135deg,#ede9fe,#ddd6fe)">
+        <svg viewBox="0 0 300 180" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="150" cy="90" r="30" fill="rgba(109,40,217,0.2)" stroke="rgba(109,40,217,0.5)" stroke-width="2"/>
+          <line x1="150" y1="60" x2="150" y2="20" stroke="rgba(109,40,217,0.5)" stroke-width="2.5"/>
+          <line x1="122" y1="75" x2="85" y2="50" stroke="rgba(109,40,217,0.5)" stroke-width="2"/>
+          <line x1="178" y1="75" x2="215" y2="50" stroke="rgba(109,40,217,0.5)" stroke-width="2"/>
+          <line x1="120" y1="100" x2="70" y2="110" stroke="rgba(109,40,217,0.5)" stroke-width="2"/>
+          <line x1="180" y1="100" x2="230" y2="110" stroke="rgba(109,40,217,0.5)" stroke-width="2"/>
+          <line x1="150" y1="120" x2="150" y2="170" stroke="rgba(14,165,233,0.7)" stroke-width="4"/>
+          <circle cx="150" cy="170" r="7" fill="rgba(14,165,233,0.5)"/>
+          <circle cx="150" cy="90" r="12" fill="rgba(109,40,217,0.4)"/>
+        </svg>
+        <span class="card-emoji">🧠</span>
+        <span class="card-zoom-hint">🔍 Ver detalhes</span>
+      </div>
+      <div class="card-body">
+        <div class="card-tag">Fisiologia</div>
+        <div class="card-title">Neurônio</div>
+        <div class="card-desc">Célula especializada em conduzir impulsos elétricos pelo sistema nervoso.</div>
+        <div class="card-chips">
+          <span class="chip chip-purple">Axônio</span>
+          <span class="chip chip-green">Dendrito</span>
+          <span class="chip chip-amber">Sinapse</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="bio-card" onclick="openModal('coracao')">
+      <div class="card-img" style="background: linear-gradient(135deg,#fde8e6,#fcc7c2)">
+        <svg viewBox="0 0 300 180" xmlns="http://www.w3.org/2000/svg">
+          <path d="M150,155 C60,110 40,60 70,40 C90,28 115,38 150,70 C185,38 210,28 230,40 C260,60 240,110 150,155Z" fill="rgba(224,82,64,0.25)" stroke="rgba(224,82,64,0.55)" stroke-width="2"/>
+          <path d="M150,135 C80,100 65,70 85,55 C100,45 118,52 150,78 C182,52 200,45 215,55 C235,70 220,100 150,135Z" fill="rgba(224,82,64,0.3)" stroke="rgba(224,82,64,0.45)" stroke-width="1.5"/>
+          <line x1="150" y1="78" x2="150" y2="135" stroke="rgba(224,82,64,0.6)" stroke-width="2"/>
+          <line x1="120" y1="90" x2="180" y2="90" stroke="rgba(224,82,64,0.4)" stroke-width="1.5"/>
+          <text x="130" y="88" font-size="9" fill="rgba(224,82,64,0.8)" font-weight="bold">AD</text>
+          <text x="155" y="88" font-size="9" fill="rgba(224,82,64,0.8)" font-weight="bold">AE</text>
+          <text x="130" y="118" font-size="9" fill="rgba(224,82,64,0.8)" font-weight="bold">VD</text>
+          <text x="155" y="118" font-size="9" fill="rgba(224,82,64,0.8)" font-weight="bold">VE</text>
+        </svg>
+        <span class="card-emoji">❤️</span>
+        <span class="card-zoom-hint">🔍 Ver detalhes</span>
+      </div>
+      <div class="card-body">
+        <div class="card-tag">Fisiologia Animal</div>
+        <div class="card-title">Coração Humano</div>
+        <div class="card-desc">Bomba muscular que movimenta o sangue por toda a circulação.</div>
+        <div class="card-chips">
+          <span class="chip chip-coral">Câmaras</span>
+          <span class="chip chip-green">Circulação</span>
+          <span class="chip chip-amber">Válvulas</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="bio-card" onclick="openModal('mitose')">
+      <div class="card-img" style="background: linear-gradient(135deg,#d1fae5,#a7f3d0)">
+        <svg viewBox="0 0 300 180" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="75" cy="90" r="40" fill="rgba(46,204,143,0.15)" stroke="rgba(46,204,143,0.4)" stroke-width="1.5"/>
+          <line x1="60" y1="75" x2="90" y2="105" stroke="rgba(30,107,74,0.6)" stroke-width="2"/>
+          <line x1="90" y1="75" x2="60" y2="105" stroke="rgba(30,107,74,0.6)" stroke-width="2"/>
+          <text x="75" y="140" font-size="9" text-anchor="middle" fill="rgba(30,107,74,0.8)" font-weight="bold">Prófase</text>
+          <circle cx="150" cy="90" r="40" fill="rgba(46,204,143,0.15)" stroke="rgba(46,204,143,0.4)" stroke-width="1.5"/>
+          <line x1="130" y1="90" x2="170" y2="90" stroke="rgba(30,107,74,0.6)" stroke-width="2"/>
+          <line x1="150" y1="75" x2="150" y2="105" stroke="rgba(30,107,74,0.6)" stroke-width="2"/>
+          <text x="150" y="140" font-size="9" text-anchor="middle" fill="rgba(30,107,74,0.8)" font-weight="bold">Metáfase</text>
+          <circle cx="225" cy="90" r="40" fill="rgba(46,204,143,0.15)" stroke="rgba(46,204,143,0.4)" stroke-width="1.5"/>
+          <ellipse cx="210" cy="90" rx="20" ry="30" fill="rgba(46,204,143,0.3)" stroke="rgba(46,204,143,0.6)" stroke-width="1.5"/>
+          <ellipse cx="240" cy="90" rx="20" ry="30" fill="rgba(46,204,143,0.3)" stroke="rgba(46,204,143,0.6)" stroke-width="1.5"/>
+          <text x="225" y="140" font-size="9" text-anchor="middle" fill="rgba(30,107,74,0.8)" font-weight="bold">Telófase</text>
+        </svg>
+        <span class="card-emoji">🔄</span>
+        <span class="card-zoom-hint">🔍 Ver detalhes</span>
+      </div>
+      <div class="card-body">
+        <div class="card-tag">Citologia</div>
+        <div class="card-title">Divisão Celular — Mitose</div>
+        <div class="card-desc">O processo pelo qual uma célula se divide em duas células-filhas idênticas.</div>
+        <div class="card-chips">
+          <span class="chip chip-green">Prófase</span>
+          <span class="chip chip-amber">Metáfase</span>
+          <span class="chip chip-purple">Telófase</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="bio-card" onclick="openModal('gene')">
+      <div class="card-img" style="background: linear-gradient(135deg,#fef3c7,#fde68a)">
+        <svg viewBox="0 0 300 180" xmlns="http://www.w3.org/2000/svg">
+          <rect x="40" y="40" width="220" height="100" rx="12" fill="rgba(217,119,6,0.1)" stroke="rgba(217,119,6,0.3)" stroke-width="1.5"/>
+          <rect x="55" y="55" width="45" height="70" rx="6" fill="rgba(224,82,64,0.3)" stroke="rgba(224,82,64,0.5)" stroke-width="1"/>
+          <text x="77" y="94" font-size="9" text-anchor="middle" fill="rgba(224,82,64,0.9)" font-weight="bold">GENE A</text>
+          <rect x="128" y="55" width="45" height="70" rx="6" fill="rgba(46,204,143,0.3)" stroke="rgba(46,204,143,0.5)" stroke-width="1"/>
+          <text x="150" y="94" font-size="9" text-anchor="middle" fill="rgba(30,107,74,0.9)" font-weight="bold">GENE B</text>
+          <rect x="200" y="55" width="45" height="70" rx="6" fill="rgba(109,40,217,0.3)" stroke="rgba(109,40,217,0.5)" stroke-width="1"/>
+          <text x="222" y="94" font-size="9" text-anchor="middle" fill="rgba(109,40,217,0.9)" font-weight="bold">GENE C</text>
+        </svg>
+        <span class="card-emoji">📊</span>
+        <span class="card-zoom-hint">🔍 Ver detalhes</span>
+      </div>
+      <div class="card-body">
+        <div class="card-tag">Genética</div>
+        <div class="card-title">Leis de Mendel</div>
+        <div class="card-desc">Dominância, recessividade e as proporções fenotípicas e genotípicas.</div>
+        <div class="card-chips">
+          <span class="chip chip-amber">Genótipo</span>
+          <span class="chip chip-coral">Fenótipo</span>
+          <span class="chip chip-purple">Alelo</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="bio-card" onclick="openModal('sangue')">
+      <div class="card-img" style="background: linear-gradient(135deg,#fde8e6,#fee2e2)">
+        <svg viewBox="0 0 300 180" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="70" cy="90" r="25" fill="rgba(224,82,64,0.3)" stroke="rgba(224,82,64,0.6)" stroke-width="2"/>
+          <circle cx="70" cy="90" r="10" fill="rgba(224,82,64,0.1)" stroke="rgba(224,82,64,0.3)" stroke-width="1"/>
+          <circle cx="140" cy="70" r="18" fill="rgba(30,107,74,0.25)" stroke="rgba(30,107,74,0.5)" stroke-width="2"/>
+          <circle cx="140" cy="70" r="7" fill="rgba(30,107,74,0.3)"/>
+          <circle cx="140" cy="70" r="4" fill="rgba(109,40,217,0.6)"/>
+          <circle cx="210" cy="100" r="8" fill="rgba(217,119,6,0.6)" stroke="rgba(217,119,6,0.8)" stroke-width="1.5"/>
+          <circle cx="230" cy="85" r="8" fill="rgba(217,119,6,0.6)" stroke="rgba(217,119,6,0.8)" stroke-width="1.5"/>
+          <circle cx="215" cy="70" r="8" fill="rgba(217,119,6,0.6)" stroke="rgba(217,119,6,0.8)" stroke-width="1.5"/>
+          <text x="70" y="130" font-size="9" text-anchor="middle" fill="rgba(224,82,64,0.9)" font-weight="bold">Hemácia</text>
+          <text x="140" y="105" font-size="9" text-anchor="middle" fill="rgba(30,107,74,0.9)" font-weight="bold">Leucócito</text>
+          <text x="220" y="130" font-size="9" text-anchor="middle" fill="rgba(217,119,6,0.9)" font-weight="bold">Plaqueta</text>
+        </svg>
+        <span class="card-emoji">🩸</span>
+        <span class="card-zoom-hint">🔍 Ver detalhes</span>
+      </div>
+      <div class="card-body">
+        <div class="card-tag">Histologia</div>
+        <div class="card-title">Sangue Humano</div>
+        <div class="card-desc">Tecido líquido com hemácias, leucócitos e plaquetas em plasma.</div>
+        <div class="card-chips">
+          <span class="chip chip-coral">Hemácia</span>
+          <span class="chip chip-green">Leucócito</span>
+          <span class="chip chip-amber">Plasma</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="bio-card" onclick="openModal('hormonio')">
+      <div class="card-img" style="background: linear-gradient(135deg,#e0f2fe,#bae6fd)">
+        <svg viewBox="0 0 300 180" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="80" cy="90" rx="40" ry="55" fill="rgba(14,165,233,0.15)" stroke="rgba(14,165,233,0.4)" stroke-width="2"/>
+          <text x="80" y="93" font-size="9" text-anchor="middle" fill="rgba(14,165,233,0.8)" font-weight="bold">Glândula</text>
+          <path d="M120,80 Q170,60 200,80" fill="none" stroke="rgba(14,165,233,0.5)" stroke-width="1.5" stroke-dasharray="5,3"/>
+          <path d="M120,90 Q170,90 200,90" fill="none" stroke="rgba(14,165,233,0.5)" stroke-width="1.5" stroke-dasharray="5,3"/>
+          <path d="M120,100 Q170,120 200,100" fill="none" stroke="rgba(14,165,233,0.5)" stroke-width="1.5" stroke-dasharray="5,3"/>
+          <circle cx="155" cy="75" r="6" fill="rgba(14,165,233,0.6)"/>
+          <circle cx="165" cy="90" r="6" fill="rgba(14,165,233,0.6)"/>
+          <circle cx="155" cy="105" r="6" fill="rgba(14,165,233,0.6)"/>
+          <ellipse cx="230" cy="90" rx="35" ry="50" fill="rgba(14,165,233,0.1)" stroke="rgba(14,165,233,0.35)" stroke-width="2"/>
+          <text x="230" y="93" font-size="9" text-anchor="middle" fill="rgba(14,165,233,0.8)" font-weight="bold">Órgão-alvo</text>
+        </svg>
+        <span class="card-emoji">⚗️</span>
+        <span class="card-zoom-hint">🔍 Ver detalhes</span>
+      </div>
+      <div class="card-body">
+        <div class="card-tag">Fisiologia</div>
+        <div class="card-title">Sistema Endócrino</div>
+        <div class="card-desc">Glândulas que liberam hormônios para regular funções do organismo.</div>
+        <div class="card-chips">
+          <span class="chip chip-green">Hormônio</span>
+          <span class="chip chip-purple">Insulina</span>
+          <span class="chip chip-amber">Tireoide</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 3º ANO ===== -->
+<div class="serie-section" id="serie-3">
+  <div class="year-label">
+    <span class="year-badge">3º Ano</span>
+    <span class="year-title">Ecologia, Evolução e Diversidade</span>
+  </div>
+
+  <div class="cards-grid">
+    <div class="bio-card" onclick="openModal('ecosistema')">
+      <div class="card-img" style="background: linear-gradient(135deg,#d1fae5,#bbf7d0)">
+        <svg viewBox="0 0 300 180" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="150" cy="130" rx="130" ry="30" fill="rgba(46,204,143,0.2)" stroke="rgba(30,107,74,0.3)" stroke-width="1.5"/>
+          <rect x="60" y="90" width="18" height="40" rx="3" fill="rgba(30,107,74,0.5)"/>
+          <polygon points="69,55 55,92 83,92" fill="rgba(30,107,74,0.6)"/>
+          <rect x="100" y="80" width="22" height="50" rx="3" fill="rgba(30,107,74,0.5)"/>
+          <polygon points="111,40 95,82 127,82" fill="rgba(30,107,74,0.7)"/>
+          <rect x="145" y="95" width="16" height="35" rx="3" fill="rgba(30,107,74,0.45)"/>
+          <polygon points="153,65 143,97 163,97" fill="rgba(30,107,74,0.55)"/>
+          <circle cx="230" cy="100" r="25" fill="rgba(14,165,233,0.3)" stroke="rgba(14,165,233,0.5)" stroke-width="1.5"/>
+          <circle cx="240" cy="80" r="8" fill="rgba(255,255,255,0.5)"/>
+          <circle cx="225" cy="70" r="12" fill="rgba(255,255,255,0.4)"/>
+          <text x="150" y="170" font-size="9" text-anchor="middle" fill="rgba(30,107,74,0.9)" font-weight="bold">Bioma de Floresta</text>
+        </svg>
+        <span class="card-emoji">🌲</span>
+        <span class="card-zoom-hint">🔍 Ver detalhes</span>
+      </div>
+      <div class="card-body">
+        <div class="card-tag">Ecologia</div>
+        <div class="card-title">Ecossistema Florestal</div>
+        <div class="card-desc">Cadeias tróficas, fluxo de energia e ciclagem de nutrientes.</div>
+        <div class="card-chips">
+          <span class="chip chip-green">Cadeia Trófica</span>
+          <span class="chip chip-amber">Bioma</span>
+          <span class="chip chip-coral">Biodiversidade</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="bio-card" onclick="openModal('evolucao')">
+      <div class="card-img" style="background: linear-gradient(135deg,#fef3c7,#fde68a)">
+        <svg viewBox="0 0 300 180" xmlns="http://www.w3.org/2000/svg">
+          <path d="M30,150 L60,120 L90,100 L130,80 L180,60 L230,45 L270,35" fill="none" stroke="rgba(217,119,6,0.6)" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="30" cy="150" r="10" fill="rgba(217,119,6,0.3)" stroke="rgba(217,119,6,0.6)" stroke-width="1.5"/>
+          <circle cx="90" cy="100" r="12" fill="rgba(217,119,6,0.35)" stroke="rgba(217,119,6,0.6)" stroke-width="1.5"/>
+          <circle cx="160" cy="65" r="14" fill="rgba(217,119,6,0.4)" stroke="rgba(217,119,6,0.6)" stroke-width="1.5"/>
+          <circle cx="270" cy="35" r="16" fill="rgba(217,119,6,0.5)" stroke="rgba(217,119,6,0.7)" stroke-width="1.5"/>
+          <text x="30" y="168" font-size="8" text-anchor="middle" fill="rgba(217,119,6,0.8)">Ancestral</text>
+          <text x="270" y="22" font-size="8" text-anchor="middle" fill="rgba(217,119,6,0.8)">Atual</text>
+        </svg>
+        <span class="card-emoji">🦕</span>
+        <span class="card-zoom-hint">🔍 Ver detalhes</span>
+      </div>
+      <div class="card-body">
+        <div class="card-tag">Evolução</div>
+        <div class="card-title">Seleção Natural</div>
+        <div class="card-desc">Darwin e a teoria evolutiva: variação, herança, seleção e adaptação.</div>
+        <div class="card-chips">
+          <span class="chip chip-amber">Darwin</span>
+          <span class="chip chip-green">Adaptação</span>
+          <span class="chip chip-purple">Especiação</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="bio-card" onclick="openModal('fotossintese')">
+      <div class="card-img" style="background: linear-gradient(135deg,#d1fae5,#a7f3d0)">
+        <svg viewBox="0 0 300 180" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="150" cy="90" rx="110" ry="65" fill="rgba(46,204,143,0.15)" stroke="rgba(30,107,74,0.3)" stroke-width="1.5"/>
+          <ellipse cx="150" cy="90" rx="75" ry="45" fill="rgba(46,204,143,0.2)" stroke="rgba(30,107,74,0.4)" stroke-width="1.5"/>
+          <line x1="60" y1="40" x2="110" y2="80" stroke="rgba(255,200,0,0.7)" stroke-width="2.5" stroke-dasharray="4,2"/>
+          <line x1="80" y1="30" x2="120" y2="75" stroke="rgba(255,200,0,0.7)" stroke-width="2.5" stroke-dasharray="4,2"/>
+          <circle cx="60" cy="40" r="10" fill="rgba(255,200,0,0.6)" stroke="rgba(255,200,0,0.8)" stroke-width="1.5"/>
+          <line x1="240" y1="40" x2="190" y2="80" stroke="rgba(46,204,143,0.6)" stroke-width="2.5" stroke-dasharray="4,2"/>
+          <text x="240" y="38" font-size="8" text-anchor="middle" fill="rgba(30,107,74,0.9)" font-weight="bold">O₂</text>
+          <text x="75" y="38" font-size="8" text-anchor="middle" fill="rgba(180,130,0,0.9)" font-weight="bold">luz</text>
+          <text x="150" y="93" font-size="10" text-anchor="middle" fill="rgba(30,107,74,0.9)" font-weight="bold">Cloroplasto</text>
+          <circle cx="120" cy="75" r="6" fill="rgba(46,204,143,0.5)"/>
+          <circle cx="180" cy="105" r="6" fill="rgba(46,204,143,0.5)"/>
+        </svg>
+        <span class="card-emoji">🌿</span>
+        <span class="card-zoom-hint">🔍 Ver detalhes</span>
+      </div>
+      <div class="card-body">
+        <div class="card-tag">Fisiologia Vegetal</div>
+        <div class="card-title">Fotossíntese</div>
+        <div class="card-desc">Como as plantas convertem luz solar em energia química utilizável.</div>
+        <div class="card-chips">
+          <span class="chip chip-green">Clorofila</span>
+          <span class="chip chip-amber">Luz</span>
+          <span class="chip chip-coral">CO₂</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="bio-card" onclick="openModal('virus')">
+      <div class="card-img" style="background: linear-gradient(135deg,#fde8e6,#fdd5cf)">
+        <svg viewBox="0 0 300 180" xmlns="http://www.w3.org/2000/svg">
+          <polygon points="150,50 175,72 165,100 135,100 125,72" fill="rgba(224,82,64,0.2)" stroke="rgba(224,82,64,0.5)" stroke-width="2"/>
+          <circle cx="150" cy="75" r="28" fill="rgba(224,82,64,0.15)" stroke="rgba(224,82,64,0.4)" stroke-width="1.5"/>
+          <line x1="150" y1="47" x2="150" y2="30" stroke="rgba(224,82,64,0.6)" stroke-width="2.5"/>
+          <circle cx="150" cy="28" r="5" fill="rgba(224,82,64,0.7)"/>
+          <line x1="170" y1="58" x2="185" y2="44" stroke="rgba(224,82,64,0.6)" stroke-width="2.5"/>
+          <circle cx="187" cy="42" r="5" fill="rgba(224,82,64,0.7)"/>
+          <line x1="130" y1="58" x2="115" y2="44" stroke="rgba(224,82,64,0.6)" stroke-width="2.5"/>
+          <circle cx="113" cy="42" r="5" fill="rgba(224,82,64,0.7)"/>
+          <line x1="150" y1="103" x2="150" y2="120" stroke="rgba(224,82,64,0.6)" stroke-width="2.5"/>
+          <circle cx="150" cy="122" r="5" fill="rgba(224,82,64,0.7)"/>
+          <circle cx="150" cy="75" r="12" fill="rgba(224,82,64,0.4)"/>
+          <text x="150" y="79" font-size="8" text-anchor="middle" fill="rgba(180,50,35,0.9)" font-weight="bold">RNA</text>
+        </svg>
+        <span class="card-emoji">🦠</span>
+        <span class="card-zoom-hint">🔍 Ver detalhes</span>
+      </div>
+      <div class="card-body">
+        <div class="card-tag">Microbiologia</div>
+        <div class="card-title">Vírus</div>
+        <div class="card-desc">Agentes infecciosos acelulares: cápside, ácido nucleico e tropismo celular.</div>
+        <div class="card-chips">
+          <span class="chip chip-coral">Cápside</span>
+          <span class="chip chip-purple">RNA/DNA</span>
+          <span class="chip chip-amber">Infecção</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="bio-card" onclick="openModal('bioma')">
+      <div class="card-img" style="background: linear-gradient(135deg,#ecfdf5,#d1fae5)">
+        <svg viewBox="0 0 300 180" xmlns="http://www.w3.org/2000/svg">
+          <rect x="0" y="120" width="300" height="60" fill="rgba(30,107,74,0.15)"/>
+          <rect x="0" y="0" width="300" height="120" fill="rgba(14,165,233,0.08)"/>
+          <polygon points="20,120 50,60 80,120" fill="rgba(30,107,74,0.4)"/>
+          <polygon points="60,120 100,45 140,120" fill="rgba(30,107,74,0.5)"/>
+          <polygon points="130,120 165,55 200,120" fill="rgba(30,107,74,0.4)"/>
+          <polygon points="185,120 215,70 245,120" fill="rgba(30,107,74,0.35)"/>
+          <circle cx="220" cy="35" r="20" fill="rgba(255,200,0,0.4)" stroke="rgba(255,180,0,0.5)" stroke-width="1.5"/>
+          <rect x="100" y="105" width="100" height="15" rx="5" fill="rgba(14,165,233,0.4)"/>
+          <text x="150" y="116" font-size="8" text-anchor="middle" fill="rgba(14,100,190,0.8)" font-weight="bold">Rio</text>
+        </svg>
+        <span class="card-emoji">🌍</span>
+        <span class="card-zoom-hint">🔍 Ver detalhes</span>
+      </div>
+      <div class="card-body">
+        <div class="card-tag">Ecologia</div>
+        <div class="card-title">Biomas Brasileiros</div>
+        <div class="card-desc">Amazônia, Cerrado, Mata Atlântica, Caatinga, Pampa e Pantanal.</div>
+        <div class="card-chips">
+          <span class="chip chip-green">Amazônia</span>
+          <span class="chip chip-amber">Cerrado</span>
+          <span class="chip chip-coral">Caatinga</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="bio-card" onclick="openModal('mutacao')">
+      <div class="card-img" style="background: linear-gradient(135deg,#ede9fe,#ddd6fe)">
+        <svg viewBox="0 0 300 180" xmlns="http://www.w3.org/2000/svg">
+          <path d="M100,20 Q140,50 100,80 Q60,110 100,140" fill="none" stroke="rgba(109,40,217,0.6)" stroke-width="3"/>
+          <path d="M140,20 Q100,50 140,80 Q180,110 140,140" fill="none" stroke="rgba(109,40,217,0.6)" stroke-width="3"/>
+          <line x1="103" y1="35" x2="137" y2="35" stroke="rgba(224,82,64,0.8)" stroke-width="2"/>
+          <line x1="97" y1="60" x2="143" y2="60" stroke="rgba(46,204,143,0.8)" stroke-width="2"/>
+          <line x1="103" y1="85" x2="137" y2="85" stroke="rgba(217,119,6,0.8)" stroke-width="2"/>
+          <line x1="97" y1="108" x2="143" y2="108" stroke="rgba(224,82,64,0.8)" stroke-width="2"/>
+          <line x1="100" y1="132" x2="140" y2="132" stroke="rgba(46,204,143,0.8)" stroke-width="2"/>
+          <circle cx="97" cy="60" r="5" fill="rgba(224,82,64,0.9)"/>
+          <line x1="97" y1="60" x2="85" y2="48" stroke="rgba(224,82,64,0.8)" stroke-width="1.5"/>
+          <text x="78" y="46" font-size="8" fill="rgba(224,82,64,0.9)" font-weight="bold">MUT</text>
+          <text x="180" y="90" font-size="10" fill="rgba(109,40,217,0.8)" font-weight="bold">DNA WT</text>
+          <text x="180" y="105" font-size="8" fill="rgba(224,82,64,0.7)">← Mutação</text>
+        </svg>
+        <span class="card-emoji">⚡</span>
+        <span class="card-zoom-hint">🔍 Ver detalhes</span>
+      </div>
+      <div class="card-body">
+        <div class="card-tag">Genética</div>
+        <div class="card-title">Mutação Gênica</div>
+        <div class="card-desc">Alterações na sequência do DNA: substituição, deleção e inserção de bases.</div>
+        <div class="card-chips">
+          <span class="chip chip-purple">Ponto</span>
+          <span class="chip chip-coral">Frameshift</span>
+          <span class="chip chip-green">Reparo</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModalOnBg(event)">
+  <div class="modal" id="modal-box">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-hero" id="modal-hero"></div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
+<footer>
+  <p>BioZoom &copy; 2024 — Material educativo para o <span>Ensino Médio Brasileiro</span></p>
+  <p style="margin-top:4px;font-size:0.75rem">Clique em qualquer card para explorar os detalhes moleculares e celulares</p>
+</footer>
+
+<script>
+function setSerie(n) {
+  document.querySelectorAll('.serie-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('serie-' + n).classList.add('active');
+  document.querySelectorAll('.tab')[n-1].classList.add('active');
+}
+
+const DATA = {
+  'celula-animal': {
+    emoji: '🦠',
+    bg: 'linear-gradient(135deg,#1a6b4a,#0d9488)',
+    tag: 'Citologia — 1º Ano',
+    title: 'Célula Animal',
+    intro: 'A célula animal é a unidade fundamental dos organismos animais. Delimitada pela membrana plasmática, sem parede celular, apresenta diversas organelas que realizam funções específicas para manter a vida da célula e do organismo.',
+    zoomPath: ['Organismo','Tecido','Célula','Organela','Molécula'],
+    zoomIcons: ['🐾','🔬','🦠','⚙️','⚛️'],
+    sections: [
+      {
+        title: 'Estruturas da Membrana',
+        items: [
+          { icon: '🫧', name: 'Membrana Plasmática', desc: 'Bicamada de fosfolipídios com proteínas integrais e periféricas. Controla o transporte.', hl: true },
+          { icon: '🔑', name: 'Proteínas de Canal', desc: 'Permitem a passagem seletiva de íons e moléculas pequenas por difusão facilitada.' },
+          { icon: '🏷️', name: 'Glicoproteínas', desc: 'Reconhecimento celular, imunidade e adesão entre células. Formam o glicocalix.' },
+          { icon: '🧱', name: 'Colesterol', desc: 'Estabiliza a fluidez da membrana. Mais colesterol = membrana menos fluida.' }
+        ]
+      },
+      {
+        title: 'Organelas Citoplasmáticas',
+        items: [
+          { icon: '⚡', name: 'Mitocôndria', desc: 'Respiração celular aeróbica. Produz ATP via fosforilação oxidativa. Possui DNA próprio.', hl: true },
+          { icon: '🏭', name: 'Retículo Endoplasmático', desc: 'Rugoso (síntese de proteínas) e Liso (lipídios, destoxificação).' },
+          { icon: '📦', name: 'Complexo de Golgi', desc: 'Processa, empacota e direciona proteínas e lipídios para seus destinos finais.' },
+          { icon: '♻️', name: 'Lisossomo', desc: 'Contém enzimas hidrolíticas. Digestão intracelular, autofagia e apoptose.' },
+          { icon: '🔵', name: 'Núcleo', desc: 'Centro de controle celular. Contém o DNA organizado em cromossomos.' },
+          { icon: '🔴', name: 'Nucléolo', desc: 'Síntese de RNA ribossomal (rRNA). Ativo em células com alta produção proteica.' }
+        ]
+      }
+    ],
+    fact: '<strong>Sabia que?</strong> Uma célula humana típica possui entre 1.000 e 2.000 mitocôndrias! Elas produzem ~95% do ATP da célula, e acredita-se que surgiram de bactérias que foram englobadas por endossimbiose há ~2 bilhões de anos.'
+  },
+
+  'proteina': {
+    emoji: '🧪',
+    bg: 'linear-gradient(135deg,#92400e,#d97706)',
+    tag: 'Bioquímica — 1º Ano',
+    title: 'Proteínas',
+    intro: 'Proteínas são macromoléculas formadas por aminoácidos unidos por ligações peptídicas. São os polímeros mais versáteis da biologia, com funções que vão de estrutura (colágeno) a catálise (enzimas) e sinalização (hormônios).',
+    zoomPath: ['Proteína','Cadeia','Aminoácido','Ligação','Átomo'],
+    zoomIcons: ['🧪','〰️','🔴','🔗','⚛️'],
+    sections: [
+      {
+        title: 'Níveis de Estrutura',
+        items: [
+          { icon: '1️⃣', name: 'Estrutura Primária', desc: 'Sequência linear de aminoácidos determinada pelo código genético (mRNA/DNA).', hl: true },
+          { icon: '2️⃣', name: 'Estrutura Secundária', desc: 'Hélice-α e folha-β formadas por pontes de hidrogênio entre grupos do esqueleto peptídico.' },
+          { icon: '3️⃣', name: 'Estrutura Terciária', desc: 'Dobramento 3D da cadeia inteira. Pontes dissulfeto, forças hidrofóbicas, eletrostáticas.' },
+          { icon: '4️⃣', name: 'Estrutura Quaternária', desc: 'Associação de duas ou mais cadeias. Ex: hemoglobina (4 subunidades α₂β₂).' }
+        ]
+      },
+      {
+        title: 'Funções das Proteínas',
+        items: [
+          { icon: '⚗️', name: 'Enzimas', desc: 'Catalisadores biológicos. Reduzem energia de ativação. Ex: amilase, DNA polimerase.', hl: true },
+          { icon: '🛡️', name: 'Anticorpos', desc: 'Imunoglobulinas produzidas pelo sistema imune para reconhecer antígenos.' },
+          { icon: '🏗️', name: 'Estruturais', desc: 'Colágeno (tendões), queratina (cabelo/unhas), actina/miosina (músculo).' },
+          { icon: '📡', name: 'Receptores', desc: 'Reconhecem hormônios, neurotransmissores, e iniciam cascatas de sinalização.' }
+        ]
+      }
+    ],
+    fact: '<strong>Desnaturação:</strong> Calor, pH extremo ou solventes podem quebrar a estrutura 3D de uma proteína, tornando-a inativa — como quando o ovo cozinha e a albumina branca solidifica. A sequência (estrutura 1ª) permanece intacta, mas a função é perdida.'
+  },
+
+  'carboidratos': {
+    emoji: '🍬',
+    bg: 'linear-gradient(135deg,#4c1d95,#7c3aed)',
+    tag: 'Bioquímica — 1º Ano',
+    title: 'Carboidratos',
+    intro: 'Carboidratos ou glucídios são a principal fonte de energia para os seres vivos. São compostos por carbono, hidrogênio e oxigênio. Classificam-se em monossacarídeos, dissacarídeos e polissacarídeos.',
+    zoomPath: ['Polissacarídeo','Dissacarídeo','Monossacarídeo','Anel','Ligação'],
+    zoomIcons: ['🌾','🍭','🍬','⬡','🔗'],
+    sections: [
+      {
+        title: 'Classificação por Tamanho',
+        items: [
+          { icon: '⬡', name: 'Monossacarídeos', desc: 'Unidades simples: glicose (C₆H₁₂O₆), frutose, galactose. Principal combustível celular.', hl: true },
+          { icon: '🍭', name: 'Dissacarídeos', desc: 'Sacarose (glicose+frutose), lactose (glicose+galactose), maltose (glicose+glicose).' },
+          { icon: '🌾', name: 'Polissacarídeos', desc: 'Amido (reserva em plantas), glicogênio (reserva em animais), celulose (estrutura).' }
+        ]
+      },
+      {
+        title: 'Funções Biológicas',
+        items: [
+          { icon: '⚡', name: 'Fonte de Energia', desc: 'A glicose é oxidada na respiração celular: C₆H₁₂O₆ + O₂ → CO₂ + H₂O + 38 ATP.', hl: true },
+          { icon: '🏗️', name: 'Estrutural', desc: 'Celulose forma a parede celular vegetal. Quitina forma o exoesqueleto de artrópodes.' },
+          { icon: '🏦', name: 'Reserva', desc: 'Glicogênio hepático e muscular. Amido nos grânulos de amiloplasto de sementes.' },
+          { icon: '📡', name: 'Sinalização', desc: 'Glicoproteínas e glicolipídios da membrana participam de reconhecimento celular.' }
+        ]
+      }
+    ],
+    fact: '<strong>O pico glicêmico:</strong> Após ingerir açúcar simples, a glicose sobe rapidamente no sangue. O pâncreas libera insulina, que sinaliza as células a captar glicose. Alimentos com fibras (polissacarídeos) liberam glicose mais lentamente — menor índice glicêmico.'
+  },
+
+  'lipidios': {
+    emoji: '🧈',
+    bg: 'linear-gradient(135deg,#7f1d1d,#dc2626)',
+    tag: 'Bioquímica — 1º Ano',
+    title: 'Lipídios',
+    intro: 'Lipídios são moléculas altamente hidrofóbicas compostas principalmente por carbono e hidrogênio. São fundamentais para as membranas celulares, como reserva energética e precursores de hormônios esteroides.',
+    zoomPath: ['Tecido Adiposo','Célula','Lipídio','Ácido Graxo','CH₂'],
+    zoomIcons: ['🧈','🫙','⬡','〰️','⚛️'],
+    sections: [
+      {
+        title: 'Tipos de Lipídios',
+        items: [
+          { icon: '🫧', name: 'Fosfolipídios', desc: 'Formam a bicamada lipídica de todas as membranas. Cabeça polar + 2 caudas apolares.', hl: true },
+          { icon: '⬡', name: 'Colesterol', desc: 'Esterol da membrana animal. Precursor de hormônios (estrogênio, testosterona) e vitamina D.' },
+          { icon: '🏦', name: 'Triglicerídeos', desc: 'Glicerol + 3 ácidos graxos. Gordura de reserva com 9 kcal/g (mais que carboidratos).' },
+          { icon: '⚗️', name: 'Ceras', desc: 'Impermeabilização (folhas, penas). Muito apolares, resistentes à água e degradação.' }
+        ]
+      },
+      {
+        title: 'Ácidos Graxos',
+        items: [
+          { icon: '📏', name: 'Saturados', desc: 'Sem duplas ligações. Sólidos em temperatura ambiente. Ex: gordura de coco, manteiga.', hl: true },
+          { icon: '〰️', name: 'Insaturados', desc: 'Com dupla(s) ligação(ões) C=C. Líquidos. Ômega-3, Ômega-6 são essenciais.' },
+          { icon: '⚠️', name: 'Trans', desc: 'Industrialmente modificados por hidrogenação parcial. Aumentam LDL, reduzem HDL.' }
+        ]
+      }
+    ],
+    fact: '<strong>A membrana como mosaico fluido:</strong> O modelo de Singer-Nicolson (1972) descreve a membrana como um "mosaico fluido": fosfolipídios em constante movimento lateral com proteínas e colesterol imersos. A fluidez é vital para a função celular.'
+  },
+
+  'dna': {
+    emoji: '🧬',
+    bg: 'linear-gradient(135deg,#075985,#0ea5e9)',
+    tag: 'Genética Molecular — 1º Ano',
+    title: 'DNA — Ácido Desoxirribonucleico',
+    intro: 'O DNA é o repositório da informação genética. Formado por nucleotídeos (fosfato + desoxirribose + base nitrogenada), organiza-se em dupla hélice antiparalela com bases complementares unidas por pontes de hidrogênio.',
+    zoomPath: ['Cromossomo','Cromatina','DNA','Nucleotídeo','Base'],
+    zoomIcons: ['🔵','〰️','🧬','⬡','🔤'],
+    sections: [
+      {
+        title: 'Composição Molecular',
+        items: [
+          { icon: '🔤', name: 'Bases Púricas', desc: 'Adenina (A) e Guanina (G). Anel duplo (purina). A pareia com T; G pareia com C.', hl: true },
+          { icon: '🔡', name: 'Bases Pirimídicas', desc: 'Timina (T) e Citosina (C). Anel simples. T pareia com A (2 pontes H); C com G (3 pontes H).' },
+          { icon: '🍬', name: 'Desoxirribose', desc: 'Açúcar pentose sem OH no carbono 2\'. Distingue DNA do RNA (que tem ribose).' },
+          { icon: '🔗', name: 'Fosfato', desc: 'Grupo fosfato negativamente carregado, forma o esqueleto açúcar-fosfato da hélice.' }
+        ]
+      },
+      {
+        title: 'Processos-Chave',
+        items: [
+          { icon: '📋', name: 'Replicação', desc: 'Semi-conservativa: cada fita serve de molde. DNA polimerase adiciona nucleotídeos 5\'→3\'.', hl: true },
+          { icon: '📢', name: 'Transcrição', desc: 'DNA → RNA mensageiro. RNA polimerase lê o molde e sintetiza mRNA complementar.' },
+          { icon: '🏭', name: 'Tradução', desc: 'mRNA → Proteína nos ribossomos. Cada códon (3 bases) especifica um aminoácido.' }
+        ]
+      }
+    ],
+    fact: '<strong>A escala do DNA:</strong> O DNA humano, se esticado em linha reta, teria ~2 metros de comprimento — tudo compactado em núcleo de 6 micrômetros! Se empilhássemos o DNA de todas as células do corpo humano (~37 trilhões), a fila de moléculas chegaria de ida e volta ao Sol mais de 60 vezes.'
+  },
+
+  'membrana': {
+    emoji: '🫧',
+    bg: 'linear-gradient(135deg,#065f46,#059669)',
+    tag: 'Citologia — 1º Ano',
+    title: 'Membrana Plasmática',
+    intro: 'A membrana plasmática é uma bicamada fosfolipídica com proteínas integrais e periféricas, colesterol e glicoconjugados. É seletivamente permeável e regula todas as trocas entre a célula e o ambiente.',
+    zoomPath: ['Célula','Membrana','Bicamada','Fosfolipídio','Átomo'],
+    zoomIcons: ['🦠','🫧','〰️','⬡','⚛️'],
+    sections: [
+      {
+        title: 'Transporte de Substâncias',
+        items: [
+          { icon: '〰️', name: 'Difusão Simples', desc: 'Substâncias apolares (O₂, CO₂, álcool) atravessam diretamente. A favor do gradiente.', hl: true },
+          { icon: '🚪', name: 'Difusão Facilitada', desc: 'Por proteínas canais ou transportadoras. A favor do gradiente, sem gasto de ATP.' },
+          { icon: '⚡', name: 'Transporte Ativo', desc: 'Contra o gradiente de concentração. Requer ATP. Ex: Bomba Na⁺/K⁺-ATPase.' },
+          { icon: '🫙', name: 'Endocitose', desc: 'Fagocitose (partículas sólidas), pinocitose (líquidos), endocitose mediada por receptor.' }
+        ]
+      },
+      {
+        title: 'Componentes da Membrana',
+        items: [
+          { icon: '🫧', name: 'Fosfolipídios', desc: 'Cabeça hidrófila (fosfato + glicerol) e duas caudas hidrófobas (ácidos graxos).', hl: true },
+          { icon: '🔵', name: 'Colesterol', desc: 'Intercalado entre os fosfolipídios. Modula a fluidez da membrana conforme temperatura.' },
+          { icon: '📡', name: 'Glicocalix', desc: 'Carboidratos ligados a proteínas e lipídios. Reconhecimento celular e imunidade.' }
+        ]
+      }
+    ],
+    fact: '<strong>Pressão osmótica:</strong> Se uma célula animal é colocada em solução hipotônica (menos sal que o citoplasma), a água entra por osmose e a célula pode lisar (estourar). Em solução hipertônica, a água sai e a célula murcha. O soro fisiológico (0,9% NaCl) é isotônico ao sangue humano.'
+  },
+
+  'neuronio': {
+    emoji: '🧠',
+    bg: 'linear-gradient(135deg,#4c1d95,#7c3aed)',
+    tag: 'Fisiologia — 2º Ano',
+    title: 'Neurônio',
+    intro: 'O neurônio é a unidade morfofuncional do sistema nervoso. Especializado em receber, integrar e transmitir informações na forma de impulsos elétricos (potenciais de ação) e sinais químicos (neurotransmissores).',
+    zoomPath: ['Encéfalo','Circuito','Neurônio','Axônio','Canal Iônico'],
+    zoomIcons: ['🧠','🔌','🔵','〰️','🚪'],
+    sections: [
+      {
+        title: 'Partes do Neurônio',
+        items: [
+          { icon: '🔵', name: 'Corpo Celular (Soma)', desc: 'Contém o núcleo e as principais organelas. Centro metabólico da célula nervosa.', hl: true },
+          { icon: '🌿', name: 'Dendritos', desc: 'Prolongamentos receptores. Recebem sinais de outros neurônios (sinapses de entrada).' },
+          { icon: '〰️', name: 'Axônio', desc: 'Prolongamento único, condutor do impulso elétrico. Pode ter até 1 metro de comprimento.' },
+          { icon: '🧣', name: 'Bainha de Mielina', desc: 'Isolante de lipídios produzido pela célula de Schwann. Acelera condução saltatorial.' }
+        ]
+      },
+      {
+        title: 'Transmissão do Sinal',
+        items: [
+          { icon: '⚡', name: 'Potencial de Ação', desc: '-70mV (repouso) → +30mV (despolarização). Abertura de canais de Na⁺ e depois K⁺.', hl: true },
+          { icon: '🔗', name: 'Sinapse Química', desc: 'Vesícula libera neurotransmissor (ACh, dopamina, GABA) na fenda sináptica.' },
+          { icon: '🔑', name: 'Neurotransmissores', desc: 'Dopamina (prazer), serotonina (humor), GABA (inibição), glutamato (excitação).' }
+        ]
+      }
+    ],
+    fact: '<strong>Velocidade do impulso:</strong> Fibras mielizadas conduzem impulsos a até 120 m/s (430 km/h!). Sem mielina: 0,5 m/s. A esclerose múltipla ataca a bainha de mielina, causando desaceleração ou falha na condução nervosa.'
+  },
+
+  'coracao': {
+    emoji: '❤️',
+    bg: 'linear-gradient(135deg,#7f1d1d,#e05240)',
+    tag: 'Fisiologia Animal — 2º Ano',
+    title: 'Coração Humano',
+    intro: 'O coração é um órgão muscular oco com quatro câmaras. Funciona como uma dupla bomba: a circulação pulmonar (pequena) e a sistêmica (grande). Bate em média 60–100 vezes por minuto, sendo controlado pelo nódulo sinusal.',
+    zoomPath: ['Sistema','Vaso','Coração','Câmara','Cardiomiócito'],
+    zoomIcons: ['🩸','🔴','❤️','🏠','⚡'],
+    sections: [
+      {
+        title: 'As Quatro Câmaras',
+        items: [
+          { icon: '🔵', name: 'Átrio Direito (AD)', desc: 'Recebe sangue desoxigenado das veias cavas superior e inferior.', hl: false },
+          { icon: '🔵', name: 'Ventrículo Direito (VD)', desc: 'Bombeia sangue desoxigenado para os pulmões via artéria pulmonar.' },
+          { icon: '🔴', name: 'Átrio Esquerdo (AE)', desc: 'Recebe sangue oxigenado das veias pulmonares (retorno dos pulmões).', hl: true },
+          { icon: '🔴', name: 'Ventrículo Esquerdo (VE)', desc: 'Câmara mais muscular. Bombeia sangue oxigenado para todo o corpo via aorta.' }
+        ]
+      },
+      {
+        title: 'Tecidos e Controle',
+        items: [
+          { icon: '⚡', name: 'Nódulo Sinusal', desc: 'Marca-passo natural do coração. Gera 60–100 impulsos/min. No AD.', hl: true },
+          { icon: '🧱', name: 'Miocárdio', desc: 'Músculo cardíaco estriado involuntário. Cardiomiócitos com junções comunicantes.' },
+          { icon: '🔢', name: 'Sístole/Diástole', desc: 'Sístole = contração ventricular (~0.3s). Diástole = relaxamento (~0.5s). ~70 bpm.' }
+        ]
+      }
+    ],
+    fact: '<strong>Infarto do Miocárdio:</strong> Ocorre quando uma artéria coronária é obstruída (geralmente por placa de ateroma + trombo). As células cardíacas sem oxigênio morrem (necrose). Diferente de AVC, que é no encéfalo. A desfibrilação restabelece o ritmo elétrico em fibrilação ventricular.'
+  },
+
+  'mitose': {
+    emoji: '🔄',
+    bg: 'linear-gradient(135deg,#064e3b,#10b981)',
+    tag: 'Citologia — 2º Ano',
+    title: 'Divisão Celular — Mitose',
+    intro: 'A mitose é a divisão celular que gera duas células-filhas geneticamente idênticas à célula-mãe (2n→2n). É usada para crescimento, renovação tecidual e regeneração. Divide-se em: prófase, metáfase, anáfase e telófase.',
+    zoomPath: ['Organismo','Tecido','Célula','Cromossomo','DNA'],
+    zoomIcons: ['🧍','🔬','🦠','🎯','🧬'],
+    sections: [
+      {
+        title: 'Fases da Mitose',
+        items: [
+          { icon: '1️⃣', name: 'Prófase', desc: 'Cromatina se condensa em cromossomos visíveis. Fuso mitótico começa a se formar.', hl: true },
+          { icon: '2️⃣', name: 'Metáfase', desc: 'Cromossomos alinham-se no plano equatorial (placa metafásica). Fuso completo.' },
+          { icon: '3️⃣', name: 'Anáfase', desc: 'Centrômeros se separam. Cromátides-irmãs migram para polos opostos da célula.' },
+          { icon: '4️⃣', name: 'Telófase', desc: 'Formam-se duas novas vesículas nucleares. Citocinese divide o citoplasma.' }
+        ]
+      },
+      {
+        title: 'Estruturas Envolvidas',
+        items: [
+          { icon: '🎯', name: 'Centrômero', desc: 'Região de constrição onde o cinetócoro se forma e os microtúbulos do fuso se ligam.', hl: true },
+          { icon: '🌐', name: 'Fuso Mitótico', desc: 'Fibras de microtúbulos que se ligam aos centrômeros e puxam os cromossomos.' },
+          { icon: '⚙️', name: 'Centrossomo', desc: 'Organiza os microtúbulos do fuso. Cada célula animal tem 2 centrossomos.' }
+        ]
+      }
+    ],
+    fact: '<strong>Câncer e mitose descontrolada:</strong> O câncer é essencialmente divisão celular sem controle. Mutações em genes que regulam o ciclo celular (proto-oncogenes → oncogenes; genes supressores como TP53) permitem divisões ilimitadas e formação de tumores. Quimioterápicos muitas vezes bloqueiam a mitose.'
+  },
+
+  'gene': {
+    emoji: '📊',
+    bg: 'linear-gradient(135deg,#78350f,#d97706)',
+    tag: 'Genética — 2º Ano',
+    title: 'Leis de Mendel e Genética',
+    intro: 'Gregor Mendel (1866) estabeleceu os princípios da hereditariedade com ervilhas. Suas leis descrevem como características são transmitidas de pais para filhos, formando a base da genética mendeliana.',
+    zoomPath: ['Descendente','Casal','Gameta','Alelo','Gene'],
+    zoomIcons: ['👶','💑','🥚','🧩','🧬'],
+    sections: [
+      {
+        title: '1ª Lei de Mendel — Segregação',
+        items: [
+          { icon: '🧩', name: 'Alelos', desc: 'Formas alternativas de um gene. Dominante (A) x Recessivo (a). Ex: Aa (heterozigoto).', hl: true },
+          { icon: '📊', name: 'Proporção 3:1', desc: 'No cruzamento Aa × Aa → 1 AA : 2 Aa : 1 aa (genótipo); 3 dom : 1 rec (fenótipo).' },
+          { icon: '🔀', name: 'Segregação', desc: 'Os alelos se separam durante a formação dos gametas (meiose). Cada gameta = 1 alelo.' }
+        ]
+      },
+      {
+        title: '2ª Lei — Combinação Independente',
+        items: [
+          { icon: '🎲', name: 'Dois Caracteres', desc: 'AaBb × AaBb → 9:3:3:1. Os genes de cromossomos diferentes se combinam livremente.', hl: true },
+          { icon: '🔗', name: 'Ligação Gênica', desc: 'Genes no mesmo cromossomo tendem a ser herdados juntos (linkage). Exceção à 2ª lei.' },
+          { icon: '🔁', name: 'Recombinação', desc: 'Crossing-over durante meiose I mistura segmentos de cromossomos homólogos.' }
+        ]
+      }
+    ],
+    fact: '<strong>Herança ligada ao sexo:</strong> Genes no cromossomo X têm herança diferente em homens (XY) e mulheres (XX). Daltinismo e hemofilia A são recessivos ligados ao X — mulheres podem ser portadoras (XᴬXᵃ) sem manifestar o traço, enquanto homens com Xᵃ Y sempre manifestam.'
+  },
+
+  'sangue': {
+    emoji: '🩸',
+    bg: 'linear-gradient(135deg,#7f1d1d,#dc2626)',
+    tag: 'Histologia — 2º Ano',
+    title: 'Sangue Humano',
+    intro: 'O sangue é um tecido conjuntivo líquido composto por plasma (55%) e elementos figurados (45%): eritrócitos, leucócitos e trombócitos (plaquetas). Transporta O₂, CO₂, nutrientes, hormônios e defende o organismo.',
+    zoomPath: ['Circulação','Vaso','Sangue','Célula','Proteína'],
+    zoomIcons: ['💓','🔴','🩸','🔬','🧪'],
+    sections: [
+      {
+        title: 'Células do Sangue',
+        items: [
+          { icon: '🔴', name: 'Eritrócitos (Hemácias)', desc: 'Anucleadas, bicôncavas, ~5 milhões/mm³. Hemoglobina transporta O₂ e CO₂.', hl: true },
+          { icon: '⚪', name: 'Leucócitos', desc: 'Células de defesa: neutrófilos (fagocitose), linfócitos (imunidade), monócitos.' },
+          { icon: '🟡', name: 'Plaquetas', desc: 'Fragmentos de megacariócitos. Fundamentais na coagulação e formação do tampão plaquetário.' }
+        ]
+      },
+      {
+        title: 'Plasma e Funções',
+        items: [
+          { icon: '💧', name: 'Plasma', desc: '92% água. Contém albumina, globulinas, fibrinogênio, hormônios, glicose, ureia.', hl: true },
+          { icon: '🔵', name: 'Sistema ABO', desc: 'Antígenos A e B na superfície da hemácia. Anticorpos no plasma. Tipos: A, B, AB, O.' },
+          { icon: '➕', name: 'Fator Rh', desc: 'Antígeno Rh presente (Rh+) ou ausente (Rh-). Importante na gravidez e transfusões.' }
+        ]
+      }
+    ],
+    fact: '<strong>Hemoglobina e altitude:</strong> Em altitudes elevadas, há menos O₂ disponível. O organismo responde produzindo mais hemácias (eritropoiese estimulada pela EPO). Por isso atletas fazem treinamento em altitude e o hormônio EPO é uma substância dopante controlada.'
+  },
+
+  'hormonio': {
+    emoji: '⚗️',
+    bg: 'linear-gradient(135deg,#0c4a6e,#0284c7)',
+    tag: 'Fisiologia — 2º Ano',
+    title: 'Sistema Endócrino',
+    intro: 'O sistema endócrino coordena funções do organismo através de glândulas que secretam hormônios diretamente na corrente sanguínea. Os hormônios agem em órgãos-alvo a distâncias, com efeitos duradouros.',
+    zoomPath: ['Organismo','Glândula','Hormônio','Receptor','Gene'],
+    zoomIcons: ['🧍','🏭','⚗️','🔑','🧬'],
+    sections: [
+      {
+        title: 'Principais Glândulas',
+        items: [
+          { icon: '🧠', name: 'Hipófise', desc: 'Mestre das glândulas. Secreta GH, TSH, FSH, LH, ACTH, ADH, ocitocina.', hl: true },
+          { icon: '🦋', name: 'Tireoide', desc: 'T3 e T4 regulam metabolismo basal. Calcitonina regula cálcio. Hipotiroidismo comum.' },
+          { icon: '🔺', name: 'Suprarrenais', desc: 'Córtex: cortisol (estresse), aldosterona. Medula: adrenalina e noradrenalina.' },
+          { icon: '🟡', name: 'Pâncreas Endócrino', desc: 'Ilhotas de Langerhans: insulina (reduz glicose), glucagon (aumenta glicose).' }
+        ]
+      },
+      {
+        title: 'Mecanismos de Ação',
+        items: [
+          { icon: '📡', name: 'Receptor de Membrana', desc: 'Hormônios hidrofílicos (insulina, glucagon). Ligam-se à superfície e ativam 2º mensageiro.', hl: true },
+          { icon: '🚪', name: 'Receptor Nuclear', desc: 'Hormônios esteroides e tireoidianos. Atravessam membrana e ativam genes diretamente.' },
+          { icon: '🔄', name: 'Feedback Negativo', desc: 'Mecanismo de autorregulação: produto final inibe a glândula que o produziu. Ex: T3/T4 inibe TSH.' }
+        ]
+      }
+    ],
+    fact: '<strong>Diabetes mellitus:</strong> Tipo 1 — destruição autoimune das células β do pâncreas, falta de insulina. Tipo 2 — resistência dos tecidos à insulina, frequentemente ligada a obesidade e sedentarismo. Ambos causam hiperglicemia crônica com danos vasculares e neurológicos.'
+  },
+
+  'ecosistema': {
+    emoji: '🌲',
+    bg: 'linear-gradient(135deg,#052e16,#166534)',
+    tag: 'Ecologia — 3º Ano',
+    title: 'Ecossistema Florestal',
+    intro: 'Um ecossistema é a interação entre uma comunidade de organismos (biocenose) e seu ambiente físico (biótopo). Energia flui de produtores para consumidores; nutrientes ciclam continuamente entre biota e ambiente abiótico.',
+    zoomPath: ['Bioma','Ecossistema','Comunidade','Espécie','Indivíduo'],
+    zoomIcons: ['🌍','🌲','🦁','🐛','🧬'],
+    sections: [
+      {
+        title: 'Cadeia e Teia Trófica',
+        items: [
+          { icon: '🌿', name: 'Produtores (1º nível)', desc: 'Plantas, algas, cianobactérias. Fotossíntese converte energia solar em orgânica.', hl: true },
+          { icon: '🐛', name: 'Consumidores Primários', desc: 'Herbívoros que se alimentam diretamente de produtores. Ex: gafanhoto, vaca, coelho.' },
+          { icon: '🦊', name: 'Consumidores Secundários', desc: 'Carnívoros que comem herbívoros. Ex: sapo, cobra, raposa.' },
+          { icon: '🍄', name: 'Decompositores', desc: 'Fungos e bactérias. Decompõem matéria orgânica, liberando nutrientes minerais.' }
+        ]
+      },
+      {
+        title: 'Ciclos Biogeoquímicos',
+        items: [
+          { icon: '💨', name: 'Ciclo do Carbono', desc: 'CO₂ → fotossíntese → orgânico → respiração/decomposição → CO₂. Combustíveis fósseis alteram este ciclo.', hl: true },
+          { icon: '💧', name: 'Ciclo da Água', desc: 'Evapotranspiração, condensação, precipitação, escoamento. Floresta = "fábrica de chuva".' },
+          { icon: '🌱', name: 'Ciclo do Nitrogênio', desc: 'N₂ → fixação (Rhizobium) → NO₃⁻ → planta → animal → decomposição → N₂.' }
+        ]
+      }
+    ],
+    fact: '<strong>Extinção em massa e desmatamento:</strong> A Terra está na 6ª extinção em massa, a única causada por uma espécie (Homo sapiens). O desmatamento destrói habitats e a Amazônia, com 10% de toda biodiversidade terrestre, perde cada ano uma área equivalente a Portugal.'
+  },
+
+  'evolucao': {
+    emoji: '🦕',
+    bg: 'linear-gradient(135deg,#78350f,#b45309)',
+    tag: 'Evolução — 3º Ano',
+    title: 'Teoria da Evolução',
+    intro: 'Charles Darwin (1859) propôs a Teoria da Seleção Natural: organismos com variações vantajosas sobrevivem e reproduzem mais. A Síntese Evolutiva Moderna integra genética mendeliana, mutação, deriva genética e seleção.',
+    zoomPath: ['Biota','População','Indivíduo','Gene','Mutação'],
+    zoomIcons: ['🌍','👥','🦁','🧬','⚡'],
+    sections: [
+      {
+        title: 'Mecanismos Evolutivos',
+        items: [
+          { icon: '🎯', name: 'Seleção Natural', desc: 'Indivíduos com alelos que aumentam aptidão (fitness) sobrevivem e reproduzem mais.', hl: true },
+          { icon: '⚡', name: 'Mutação', desc: 'Única fonte de variação genética nova. Taxa ~10⁻⁶ por base por divisão celular.' },
+          { icon: '🎲', name: 'Deriva Genética', desc: 'Mudanças aleatórias na frequência alélica. Importante em populações pequenas (gargalo).' },
+          { icon: '🚶', name: 'Fluxo Gênico', desc: 'Migração de indivíduos entre populações transfere alelos e reduz diferenciação.' }
+        ]
+      },
+      {
+        title: 'Especiação',
+        items: [
+          { icon: '🏔️', name: 'Especiação Alopátrica', desc: 'Barreira geográfica separa populações → divergência genética → nova espécie.', hl: true },
+          { icon: '🔄', name: 'Especiação Simpátrica', desc: 'Em mesma área geográfica. Poliploidia em plantas, seleção disruptiva.' },
+          { icon: '🧬', name: 'Isolamento Reprodutivo', desc: 'Pré-zigótico (temporal, comportamental) ou pós-zigótico (híbrido inviável, estéril).' }
+        ]
+      }
+    ],
+    fact: '<strong>Resistência antimicrobiana:</strong> Evolução acontece na nossa frente — bactérias que sobrevivem a antibióticos reproduzem-se, gerando populações resistentes. Isso é seleção natural em ação numa escala de horas a dias. A OMS considera resistência antimicrobiana uma das maiores ameaças à saúde global.'
+  },
+
+  'fotossintese': {
+    emoji: '🌿',
+    bg: 'linear-gradient(135deg,#052e16,#15803d)',
+    tag: 'Fisiologia Vegetal — 3º Ano',
+    title: 'Fotossíntese',
+    intro: 'A fotossíntese é o processo pelo qual organismos autotróficos convertem energia luminosa em energia química (ATP e NADPH), usando CO₂ e H₂O para produzir glicose e liberar O₂. Ocorre nos cloroplastos.',
+    zoomPath: ['Planta','Folha','Cloroplasto','Tilacoide','Clorofila'],
+    zoomIcons: ['🌳','🍃','🔬','💧','☀️'],
+    sections: [
+      {
+        title: 'Etapas da Fotossíntese',
+        items: [
+          { icon: '☀️', name: 'Fase Clara (Fotoquímica)', desc: 'Membrana tilacoide. Fotossistemas II e I captam luz. Fotólise da água libera O₂ e H⁺.', hl: true },
+          { icon: '🔄', name: 'Ciclo de Calvin', desc: 'Estroma do cloroplasto. CO₂ é fixado pela RuBisCO e reduzido a G3P usando ATP e NADPH.' },
+          { icon: '⚡', name: 'Cadeia Transportadora', desc: 'Elétrons fluem de PSII → PQ → Citocromo b₆f → PC → PSI. Bomba H⁺ → ATP sintase.' }
+        ]
+      },
+      {
+        title: 'Pigmentos e Fatores',
+        items: [
+          { icon: '🟢', name: 'Clorofila a e b', desc: 'Principais pigmentos. Absorvem luz vermelha (~680nm) e azul (~430nm). Refletem verde.', hl: true },
+          { icon: '🟠', name: 'Carotenoides', desc: 'Betacaroteno, xantofilas. Absorvem azul/verde, transferem energia para clorofila.' },
+          { icon: '💧', name: 'Fatores Limitantes', desc: 'Luz, CO₂ e temperatura limitam a taxa fotossintética (Lei de Liebig).' }
+        ]
+      }
+    ],
+    fact: '<strong>Equação geral:</strong> 6CO₂ + 6H₂O + energia luminosa → C₆H₁₂O₆ + 6O₂. Toda a vida na Terra depende direta ou indiretamente da fotossíntese. A RuBisCO é a proteína mais abundante do planeta — e curiosamente, também fixa O₂ (fotorrespiração), desperdiçando energia.'
+  },
+
+  'virus': {
+    emoji: '🦠',
+    bg: 'linear-gradient(135deg,#7f1d1d,#b91c1c)',
+    tag: 'Microbiologia — 3º Ano',
+    title: 'Vírus',
+    intro: 'Vírus são agentes infecciosos acelulares — não têm metabolismo próprio e só se replicam dentro de células hospedeiras. São compostos por ácido nucleico (DNA ou RNA) envolto por uma cápside proteica, às vezes com envelope lipídico.',
+    zoomPath: ['Organismo','Tecido','Célula','Vírus','Genoma'],
+    zoomIcons: ['🧍','🔬','🦠','⚡','🧬'],
+    sections: [
+      {
+        title: 'Estrutura Viral',
+        items: [
+          { icon: '🧬', name: 'Genoma Viral', desc: 'DNA ou RNA, simples ou dupla fita, linear ou circular. Ex: SARS-CoV-2 tem ssRNA+.', hl: true },
+          { icon: '🏰', name: 'Cápside', desc: 'Proteínas capsídeo formam estrutura protetora: icosaédrica, helicoidal ou complexa.' },
+          { icon: '🫧', name: 'Envelope Viral', desc: 'Derivado da membrana do hospedeiro. Contém glicoproteínas de reconhecimento (ex: spike de COVID).' }
+        ]
+      },
+      {
+        title: 'Ciclo de Replicação',
+        items: [
+          { icon: '🔑', name: 'Adsorção e Penetração', desc: 'Proteínas virais ligam-se a receptores celulares específicos (tropismo). Injeção do genoma.', hl: true },
+          { icon: '🏭', name: 'Replicação', desc: 'A maquinaria da célula hospedeira é sequestrada para produzir cópias do vírus.' },
+          { icon: '💥', name: 'Lise ou Latência', desc: 'Ciclo lítico: libera novos vírus destruindo a célula. Ciclo lisogênico: DNA integra ao genoma.' }
+        ]
+      }
+    ],
+    fact: '<strong>Vacinas:</strong> Estimulam o sistema imune a produzir memória imunológica sem causar doença. Tipos: atenuadas (polio oral), inativadas (gripe), subunitárias (HBV), mRNA (COVID-19). Vacinas erradicaram a varíola em 1980 — a única doença humana completamente erradicada.'
+  },
+
+  'bioma': {
+    emoji: '🌍',
+    bg: 'linear-gradient(135deg,#064e3b,#047857)',
+    tag: 'Ecologia — 3º Ano',
+    title: 'Biomas Brasileiros',
+    intro: 'O Brasil abriga 6 biomas terrestres e 2 costeiros, com a maior biodiversidade do planeta. Cada bioma tem clima, solo, vegetação e fauna únicos, resultado de milhões de anos de evolução isolada.',
+    zoomPath: ['Terra','Brasil','Bioma','Ecossistema','Espécie'],
+    zoomIcons: ['🌍','🇧🇷','🌲','🌿','🦜'],
+    sections: [
+      {
+        title: 'Os 6 Biomas Terrestres',
+        items: [
+          { icon: '🌳', name: 'Amazônia', desc: 'Maior floresta tropical do mundo. 4 milhões km². 30% das espécies terrestres. Em risco crítico.', hl: true },
+          { icon: '🌾', name: 'Cerrado', desc: 'Savana tropical. 2º maior bioma. "Berço das águas". 5% de área original. Extremamente ameaçado.' },
+          { icon: '🌵', name: 'Caatinga', desc: 'Único bioma exclusivamente brasileiro. Semiárido nordestino. Adaptações à seca (suculência, dormência).' },
+          { icon: '🌿', name: 'Mata Atlântica', desc: 'Área costeira. Apenas ~12% restante. Um dos 5 hotspots mundiais de biodiversidade.' },
+          { icon: '🐊', name: 'Pantanal', desc: 'Maior planície alagável do mundo. Rica em fauna (onça, tuiuiú). Estação seca e cheia.' },
+          { icon: '🌱', name: 'Pampa', desc: 'Campos temperados do RS. Pecuária extensiva ameaça. Gramíneas nativas e campos.' }
+        ]
+      }
+    ],
+    fact: '<strong>Brasil, potência ambiental:</strong> O Brasil tem ~13% de toda água doce superficial do planeta, a maior floresta tropical e a maior diversidade de espécies conhecidas. A legislação ambiental (Código Florestal, SNUC) protege formalmente muito, mas desmatamento e queimadas continuam sendo o principal desafio.'
+  },
+
+  'mutacao': {
+    emoji: '⚡',
+    bg: 'linear-gradient(135deg,#4c1d95,#6d28d9)',
+    tag: 'Genética — 3º Ano',
+    title: 'Mutação Gênica',
+    intro: 'Mutações são alterações permanentes na sequência de nucleotídeos do DNA. São a fonte primária de variação genética, matéria-prima da evolução. Podem ser benéficas, neutras ou deletérias, dependendo do contexto.',
+    zoomPath: ['Célula','Cromossomo','Gene','Códon','Base'],
+    zoomIcons: ['🦠','🎯','🧬','🔤','⚛️'],
+    sections: [
+      {
+        title: 'Tipos de Mutação',
+        items: [
+          { icon: '🔄', name: 'Substituição', desc: 'Missense: troca de aminoácido. Nonsense: cria stop codon prematuro. Silent: mesmo AA.', hl: true },
+          { icon: '➕', name: 'Inserção', desc: 'Adição de base(s) causa frameshift — todos os códons seguintes são lidos errado.' },
+          { icon: '➖', name: 'Deleção', desc: 'Remoção de base(s). Também causa frameshift. Pode truncar a proteína ou torná-la não-funcional.' },
+          { icon: '↔️', name: 'Inversão', desc: 'Segmento cromossômico invertido. Pode afetar a expressão de genes próximos à quebra.' }
+        ]
+      },
+      {
+        title: 'Causas e Reparo',
+        items: [
+          { icon: '☢️', name: 'Agentes Mutagênicos', desc: 'Radiação UV, ionizante, agentes químicos (benzeno, aflatoxina), vírus (HPV).', hl: true },
+          { icon: '🔧', name: 'Reparo do DNA', desc: 'Excisão de base (BER), nucleotídeo (NER), recombinação homóloga. 6 sistemas de reparo.' },
+          { icon: '🧬', name: 'Mutações Somáticas vs Germinativas', desc: 'Somáticas: afetam só o indivíduo (câncer). Germinativas: transmitidas aos descendentes.' }
+        ]
+      }
+    ],
+    fact: '<strong>Exemplo famoso — HbS:</strong> A anemia falciforme é causada por uma única substituição de base: GAG→GTG no gene da beta-globina, trocando glutamato por valina. Em homozigose (HbSS), as hemácias falciformam. Paradoxalmente, heterozigotos (HbAS) têm resistência à malária — seleção equilibrante.'
+  }
+};
+
+function openModal(id) {
+  const d = DATA[id];
+  if (!d) return;
+
+  const hero = document.getElementById('modal-hero');
+  const body = document.getElementById('modal-body');
+
+  hero.style.background = d.bg;
+  hero.innerHTML = `<span class="modal-hero-emoji">${d.emoji}</span>`;
+
+  let zoomHTML = `<div class="zoom-path">`;
+  d.zoomPath.forEach((step, i) => {
+    zoomHTML += `<div class="zoom-step">
+      <div class="zoom-step-icon">${d.zoomIcons[i]}</div>
+      <div class="zoom-step-label">${step}</div>
+    </div>`;
+    if (i < d.zoomPath.length - 1) zoomHTML += `<div class="zoom-arrow">→</div>`;
+  });
+  zoomHTML += `</div>`;
+
+  let sectionsHTML = '';
+  d.sections.forEach(sec => {
+    sectionsHTML += `<div class="zoom-section">
+      <div class="zoom-section-title">${sec.title}</div>
+      <div class="detail-cards">`;
+    sec.items.forEach(item => {
+      sectionsHTML += `<div class="detail-card${item.hl ? ' highlight' : ''}">
+        <span class="detail-icon">${item.icon}</span>
+        <div class="detail-name">${item.name}</div>
+        <div class="detail-desc">${item.desc}</div>
+      </div>`;
+    });
+    sectionsHTML += `</div></div>`;
+  });
+
+  body.innerHTML = `
+    <div class="modal-tag">${d.tag}</div>
+    <div class="modal-title">${d.title}</div>
+    <div class="modal-intro">${d.intro}</div>
+    <div class="zoom-section-title">Nível de Zoom Biológico</div>
+    ${zoomHTML}
+    ${sectionsHTML}
+    <div class="fact-box">${d.fact}</div>
+  `;
+
+  document.getElementById('modal-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function closeModalOnBg(e) {
+  if (e.target === document.getElementById('modal-overlay')) closeModal();
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+setTimeout(() => { document.getElementById('hint').style.display = 'block'; }, 2000);
+</script>
+</body>
+</html>
